@@ -20,6 +20,8 @@ const storage = new Storage({
   projectId: GOOGLE_CLOUD_PROJECT_ID, // Use environment variable for project ID
 });
 
+console.log(GOOGLE_APPLICATION_CREDENTIALS);
+
 const bucketName = GOOGLE_CLOUD_BUCKET_NAME || ""; // Use environment variable for bucket name
 const bucket = storage.bucket(bucketName);
 
