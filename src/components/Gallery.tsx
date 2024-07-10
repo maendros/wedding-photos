@@ -12,6 +12,9 @@ const Gallery: React.FC = () => {
   const [fileUrls, setFileUrls] = useState<FileUrl[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [loadingImages, setLoadingImages] = useState<{
+    [key: number]: boolean;
+  }>({});
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -34,6 +37,13 @@ const Gallery: React.FC = () => {
 
   const closeModal = () => {
     setSelectedImage(null);
+  };
+
+  const handleImageLoad = (index: number) => {
+    setLoadingImages((prev) => ({
+      ...prev,
+      [index]: true,
+    }));
   };
 
   if (loading) {
@@ -64,13 +74,23 @@ const Gallery: React.FC = () => {
             className="relative w-full h-80 p-2 cursor-pointer"
             onClick={() => handleImageClick(file.url)}
           >
-            <Image
-              src={file.url}
-              alt={`Image ${index + 1}`}
-              layout="fill"
-              objectFit="cover"
-              className="rounded-lg"
-            />
+            <div className="relative w-full h-full">
+              {!loadingImages[index] && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-200 rounded-lg z-10">
+                  <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-gray-500"></div>
+                </div>
+              )}
+              <Image
+                src={file.url}
+                alt={`Image ${index + 1}`}
+                layout="fill"
+                objectFit="cover"
+                className={`rounded-lg transition-opacity duration-500 ${
+                  loadingImages[index] ? "opacity-100" : "opacity-0"
+                }`}
+                onLoad={() => handleImageLoad(index)}
+              />
+            </div>
           </div>
         ))}
       </div>
