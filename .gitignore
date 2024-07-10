@@ -19,7 +19,7 @@
 # misc
 .DS_Store
 *.pem
-google-cloud.key.json
+google-cloud-key.json
 # debug
 npm-debug.log*
 yarn-debug.log*
