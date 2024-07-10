@@ -11,16 +11,25 @@ const {
   GOOGLE_CLOUD_PROJECT_ID,
 } = process.env;
 
+let credentials;
+if (GOOGLE_APPLICATION_CREDENTIALS) {
+  // Base64 decode the credentials and parse JSON
+  const credentialsBuffer = Buffer.from(
+    GOOGLE_APPLICATION_CREDENTIALS,
+    "base64"
+  );
+  credentials = JSON.parse(credentialsBuffer.toString());
+} else {
+  throw new Error(
+    "GOOGLE_APPLICATION_CREDENTIALS environment variable is missing or invalid."
+  );
+}
+
 // Initialize Google Cloud Storage
 const storage = new Storage({
-  keyFilename: path.join(
-    process.cwd(),
-    GOOGLE_APPLICATION_CREDENTIALS || "google-cloud-key.json"
-  ),
+  credentials, // Pass parsed credentials object directly
   projectId: GOOGLE_CLOUD_PROJECT_ID, // Use environment variable for project ID
 });
-
-console.log(GOOGLE_APPLICATION_CREDENTIALS);
 
 const bucketName = GOOGLE_CLOUD_BUCKET_NAME || ""; // Use environment variable for bucket name
 const bucket = storage.bucket(bucketName);
