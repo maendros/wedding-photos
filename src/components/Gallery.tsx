@@ -37,20 +37,31 @@ const Gallery: React.FC = () => {
   };
 
   if (loading) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-20 w-20 border-t-2 border-b-2 border-gray-900"></div>
+          <p className="mt-4">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   if (fileUrls.length === 0) {
-    return <p>No images found.</p>;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <p>No images found.</p>
+      </div>
+    );
   }
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
         {fileUrls.map((file, index) => (
           <div
             key={index}
-            className="relative w-80 h-80 p-2 cursor-pointer"
+            className="relative w-full h-80 p-2 cursor-pointer"
             onClick={() => handleImageClick(file.url)}
           >
             <Image

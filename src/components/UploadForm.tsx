@@ -18,6 +18,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
 }) => {
   const [uploading, setUploading] = useState(false); // State to track uploading status
   const [uploadProgress, setUploadProgress] = useState(0); // State to track upload progress
+  const [previewImage, setPreviewImage] = useState<string | null>(null); // State to hold preview image URL
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -62,6 +63,67 @@ const UploadForm: React.FC<UploadFormProps> = ({
     },
   });
 
+  // Function to handle file input change
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const file = event.currentTarget.files
+      ? event.currentTarget.files[0]
+      : null;
+    formik.setFieldValue("file", file);
+    setUploadedFile(file);
+
+    // Display preview image
+    if (file) {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onloadend = () => {
+        if (typeof reader.result === "string") {
+          setPreviewImage(reader.result);
+          resizeImage(reader.result); // Resize the image and set the resized preview
+        }
+      };
+    } else {
+      setPreviewImage(null);
+    }
+  };
+
+  // Function to resize the image to fit within specific dimensions
+  const resizeImage = (dataURL: string) => {
+    const img = new Image();
+    img.src = dataURL;
+
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      const maxWidth = 400; // Maximum width for the resized image
+      const maxHeight = 400; // Maximum height for the resized image
+
+      let width = img.width;
+      let height = img.height;
+
+      // Calculate new dimensions while maintaining aspect ratio
+      if (width > maxWidth) {
+        height *= maxWidth / width;
+        width = maxWidth;
+      }
+
+      if (height > maxHeight) {
+        width *= maxHeight / height;
+        height = maxHeight;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.drawImage(img, 0, 0, width, height);
+        const resizedDataURL = canvas.toDataURL("image/jpeg", 0.7); // Convert to JPEG with quality 0.7
+        setPreviewImage(resizedDataURL); // Set the resized preview image
+      }
+    };
+  };
+
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-4">
       <div className="relative">
@@ -70,13 +132,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
           id="file"
           name="file"
           type="file"
-          onChange={(event) => {
-            const file = event.currentTarget.files
-              ? event.currentTarget.files[0]
-              : null;
-            formik.setFieldValue("file", file);
-            setUploadedFile(file);
-          }}
+          onChange={handleFileChange}
           className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
         />
       </div>
@@ -84,6 +140,17 @@ const UploadForm: React.FC<UploadFormProps> = ({
       {/* Error message */}
       {formik.errors.file && (
         <div className="text-red-600">{formik.errors.file}</div>
+      )}
+
+      {/* Preview image */}
+      {previewImage && (
+        <div className="mt-4">
+          <img
+            src={previewImage}
+            alt="Preview"
+            className="max-w-full h-auto rounded-lg"
+          />
+        </div>
       )}
 
       {/* Upload button with loading state */}
@@ -118,9 +185,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
         ) : (
           "Upload Photo"
         )}
-
-        {/* Progress bar for file selection */}
       </button>
+
+      {/* Progress bar for file selection */}
       {uploadProgress > 0 && (
         <span className="flex items-center gap-x-3 whitespace-nowrap">
           <div className="flex w-full h-2 bg-gray-400 rounded-full overflow-hidden">
