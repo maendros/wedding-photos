@@ -39,7 +39,8 @@ const UploadForm: React.FC<UploadFormProps> = ({ setUploadedFile, setFileUrl }) 
     })
 
     return (
-        <form onSubmit={formik.handleSubmit}>
+        <form onSubmit={formik.handleSubmit} className="space-y-4">
+            
             <input 
                 id="file" 
                 name="file" 
@@ -49,9 +50,10 @@ const UploadForm: React.FC<UploadFormProps> = ({ setUploadedFile, setFileUrl }) 
                     formik.setFieldValue('file', file)
                     setUploadedFile(file)
                 }}
+                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
             />
-            {formik.errors.file ? <div>{formik.errors.file}</div> : null}
-            <button type="submit">Upload Photo</button>
+            {formik.errors.file ? <div className="text-red-600">{formik.errors.file}</div> : null}
+            <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-lg">Upload Photo</button>
         </form>
     )
 }
