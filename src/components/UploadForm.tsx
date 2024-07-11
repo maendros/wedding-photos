@@ -177,7 +177,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
       )}
 
       {previewImage && (
-        <div className="mt-4">
+        <div className="flex items-center justify-center">
           <img
             src={previewImage}
             alt="Preview"
