@@ -16,10 +16,10 @@ const UploadForm: React.FC<UploadFormProps> = ({
   setUploadedFile,
   setFileUrl,
 }) => {
-  const [uploading, setUploading] = useState(false); // State to track uploading status
-  const [uploadProgress, setUploadProgress] = useState(0); // State to track upload progress
-  const [previewImage, setPreviewImage] = useState<string | null>(null); // State to hold preview image URL
-  const [fileError, setFileError] = useState<string | null>(null); // State to hold file type error
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [fileError, setFileError] = useState<string | null>(null);
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -34,7 +34,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
         formData.append("file", values.file, values.file.name);
 
         try {
-          setUploading(true); // Start uploading
+          setUploading(true);
 
           const response: AxiosResponse<{ url: string }> = await axios.post(
             "/api/upload",
@@ -47,7 +47,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 const progress = Math.round(
                   (progressEvent.loaded / (progressEvent.total || 1)) * 100
                 );
-                setUploadProgress(progress); // Update upload progress
+                setUploadProgress(progress);
               },
             }
           );
@@ -56,15 +56,14 @@ const UploadForm: React.FC<UploadFormProps> = ({
         } catch (error) {
           console.error("Error uploading file", error);
         } finally {
-          setUploading(false); // Finish uploading
-          setUploadProgress(0); // Reset upload progress
-          setUploadedFile(values.file); // Update parent component with uploaded file
+          setUploading(false);
+          setUploadProgress(0);
+          setUploadedFile(values.file);
         }
       }
     },
   });
 
-  // Function to handle file input change
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -84,14 +83,13 @@ const UploadForm: React.FC<UploadFormProps> = ({
     formik.setFieldValue("file", file);
     setUploadedFile(file);
 
-    // Display preview image
     if (file) {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
         if (typeof reader.result === "string") {
           setPreviewImage(reader.result);
-          resizeImage(reader.result); // Resize the image and set the resized preview
+          resizeImage(reader.result);
         }
       };
     } else {
@@ -129,8 +127,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.drawImage(img, 0, 0, width, height);
-        const resizedDataURL = canvas.toDataURL("image/jpeg", 0.7); // Convert to JPEG with quality 0.7
-        setPreviewImage(resizedDataURL); // Set the resized preview image
+        const resizedDataURL = canvas.toDataURL("image/jpeg", 0.7);
+        setPreviewImage(resizedDataURL);
       }
     };
   };
@@ -148,13 +146,11 @@ const UploadForm: React.FC<UploadFormProps> = ({
         />
       </div>
 
-      {/* Error message */}
       {fileError && <div className="text-red-600">{fileError}</div>}
       {formik.errors.file && (
         <div className="text-red-600">{formik.errors.file}</div>
       )}
 
-      {/* Preview image */}
       {previewImage && (
         <div className="mt-4">
           <img
@@ -165,7 +161,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
         </div>
       )}
 
-      {/* Upload button with loading state */}
       <button
         type="submit"
         className="px-4 py-2 bg-blue-500 text-white rounded-lg relative"
@@ -200,7 +195,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
         )}
       </button>
 
-      {/* Progress bar for file selection */}
       {uploadProgress > 0 && (
         <span className="flex items-center gap-x-3 whitespace-nowrap">
           <div className="flex w-full h-2 bg-gray-400 rounded-full overflow-hidden">
