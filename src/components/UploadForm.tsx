@@ -156,7 +156,10 @@ const UploadForm: React.FC<UploadFormProps> = ({
   };
 
   return (
-    <form onSubmit={formik.handleSubmit} className="space-y-4">
+    <form
+      onSubmit={formik.handleSubmit}
+      className="space-y-4 w-full md:w-3/4 lg:w-1/2 xl:w-1/4 mx-auto"
+    >
       {showSplash && <Confetti />}
       <div className={`text-green-900 splash ${showSplash ? "show" : ""}`}>
         <h1 className="text-center text-2xl font-bold my-4">Thank you!</h1>
@@ -193,7 +196,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-4">
+      <div className="grid grid-cols-1 gap-4 justify-items-center">
         <UploadButton
           uploading={uploading}
           fileError={fileError}
