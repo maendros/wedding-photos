@@ -1,16 +1,12 @@
 import React, { useEffect } from "react";
 
-interface DeleteModalProps {
+interface DelModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }
 
-const DeleteModal: React.FC<DeleteModalProps> = ({
-  isOpen,
-  onClose,
-  onConfirm,
-}) => {
+const DelModal: React.FC<DelModalProps> = ({ isOpen, onClose, onConfirm }) => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -49,4 +45,4 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   );
 };
 
-export default DeleteModal;
+export default DelModal;

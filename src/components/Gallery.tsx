@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import ImageModal from "./ImageModal";
-import DeleteModal from "./DeleteModal";
+import DelModal from "./DelModal";
 import { AiFillDelete } from "react-icons/ai";
 
 interface FileUrl {
@@ -139,7 +139,7 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
         />
       )}
       {showDeleteModal && (
-        <DeleteModal
+        <DelModal
           isOpen={showDeleteModal}
           onClose={() => setShowDeleteModal(false)}
           onConfirm={handleDelete}
