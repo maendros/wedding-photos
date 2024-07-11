@@ -42,11 +42,13 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
   const handleImageClick = (url: string) => {
     if (!enableDelete) {
       setSelectedImage(url);
+      document.body.style.overflow = "hidden"; // Disable scrolling when modal is open
     }
   };
 
   const closeModal = () => {
     setSelectedImage(null);
+    document.body.style.overflow = "auto"; // Enable scrolling when modal is closed
   };
 
   const handleImageLoad = (index: number) => {
@@ -59,6 +61,7 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
   const confirmDelete = (fileName: string) => {
     setDeleteFileName(fileName);
     setShowDeleteModal(true);
+    document.body.style.overflow = "hidden"; // Disable scrolling when modal is open
   };
 
   const handleDelete = async () => {
@@ -69,6 +72,7 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
           prev.filter((file) => file.name !== deleteFileName)
         );
         setShowDeleteModal(false);
+        document.body.style.overflow = "auto"; // Enable scrolling when modal is closed
       } catch (error) {
         console.error("Error deleting file:", error);
       }
@@ -141,7 +145,10 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
       {showDeleteModal && (
         <DelModal
           isOpen={showDeleteModal}
-          onClose={() => setShowDeleteModal(false)}
+          onClose={() => {
+            setShowDeleteModal(false);
+            document.body.style.overflow = "auto"; // Enable scrolling when modal is closed
+          }}
           onConfirm={handleDelete}
         />
       )}
