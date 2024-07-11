@@ -12,6 +12,7 @@
     "@google-cloud/storage": "^7.11.3",
     "aws-sdk": "^2.1657.0",
     "axios": "^1.7.2",
+    "browser-image-compression": "^2.0.2",
     "dotenv": "^16.4.5",
     "formidable": "^3.5.1",
     "formik": "^2.4.6",

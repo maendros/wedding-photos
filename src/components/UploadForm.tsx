@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios, { AxiosResponse } from "axios";
+import imageCompression from "browser-image-compression";
 
 interface UploadFormProps {
   setUploadedFile: (file: File | null) => void;
@@ -99,14 +100,24 @@ const UploadForm: React.FC<UploadFormProps> = ({
     setFileName(file ? file.name : null); // Set the file name
 
     if (file) {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        if (typeof reader.result === "string") {
-          setPreviewImage(reader.result);
-          resizeImage(reader.result);
-        }
-      };
+      try {
+        const compressedFile = await imageCompression(file, {
+          maxSizeMB: 1,
+          maxWidthOrHeight: 800,
+          useWebWorker: true,
+        });
+        const reader = new FileReader();
+        reader.readAsDataURL(compressedFile);
+        reader.onloadend = () => {
+          if (typeof reader.result === "string") {
+            setPreviewImage(reader.result);
+            setUploadedFile(compressedFile);
+            setFileName(compressedFile.name); // Update the file name with the compressed file name
+          }
+        };
+      } catch (error) {
+        console.error("Error compressing file", error);
+      }
     } else {
       setPreviewImage(null);
     }
