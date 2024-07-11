@@ -135,11 +135,11 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
         if (typeof reader.result === "string") {
           setPreviewImage(reader.result);
         } else {
-          setFileError("Failed to read the file. Please try again.");
+          setFileError("Η φωτογραφία δεν διαβάζεται . Προσπαθήστε ξανά.");
         }
       };
       reader.onerror = () => {
-        setFileError("Failed to read the file. Please try again.");
+        setFileError("Η φωτογραφία δεν διαβάζεται . Προσπαθήστε ξανά.");
       };
     } else {
       setPreviewImage(null);
@@ -196,7 +196,9 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
               src={previewImage}
               alt="Preview"
               className="max-w-full h-auto rounded-lg"
-              onError={() => setFileError("Failed to load the image preview.")}
+              onError={() =>
+                setFileError("Η φωτογραφία δεν μπορεί να φορτωθεί..")
+              }
             />
           </div>
         </div>

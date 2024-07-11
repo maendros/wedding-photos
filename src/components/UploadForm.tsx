@@ -152,11 +152,11 @@ const UploadForm: React.FC<UploadFormProps> = ({
             setFileName(compressedFile.name); // Update the file name with the compressed file name
             setCompressionProgress(100); //
           } else {
-            setFileError("Failed to read the file. Please try again.");
+            setFileError("Η φωτογραφία δεν διαβάζεται . Προσπαθήστε ξανά.");
           }
         };
         reader.onerror = () => {
-          setFileError("Failed to read the file. Please try again.");
+          setFileError("Η φωτογραφία δεν διαβάζεται . Προσπαθήστε ξανά.");
         };
       } catch (error) {
         console.error("Error compressing file", error);
@@ -219,6 +219,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
               src={previewImage}
               alt="Preview"
               className="max-w-full h-auto rounded-lg"
+              onError={() =>
+                setFileError("Η φωτογραφία δεν μπορεί να φορτωθεί..")
+              }
             />
           </div>
         </div>
