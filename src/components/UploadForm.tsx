@@ -19,6 +19,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
   const [uploading, setUploading] = useState(false); // State to track uploading status
   const [uploadProgress, setUploadProgress] = useState(0); // State to track upload progress
   const [previewImage, setPreviewImage] = useState<string | null>(null); // State to hold preview image URL
+  const [fileError, setFileError] = useState<string | null>(null); // State to hold file type error
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -70,6 +71,16 @@ const UploadForm: React.FC<UploadFormProps> = ({
     const file = event.currentTarget.files
       ? event.currentTarget.files[0]
       : null;
+
+    if (file && !["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
+      setFileError("Only image files (jpg, png, gif) are allowed.");
+      formik.setFieldValue("file", null);
+      setUploadedFile(null);
+      setPreviewImage(null);
+      return;
+    }
+
+    setFileError(null);
     formik.setFieldValue("file", file);
     setUploadedFile(file);
 
@@ -138,6 +149,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
       </div>
 
       {/* Error message */}
+      {fileError && <div className="text-red-600">{fileError}</div>}
       {formik.errors.file && (
         <div className="text-red-600">{formik.errors.file}</div>
       )}
@@ -157,6 +169,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
       <button
         type="submit"
         className="px-4 py-2 bg-blue-500 text-white rounded-lg relative"
+        disabled={uploading || !!fileError}
       >
         {uploading ? (
           <span className="flex items-center">
