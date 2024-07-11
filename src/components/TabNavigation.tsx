@@ -11,7 +11,7 @@ const TabNavigation: React.FC = () => {
     <div className="container mx-auto p-4">
       <div className="flex justify-center mb-4">
         <button
-          className={`px-4 py-2 rounded-l-lg  ${
+          className={`px-3 py-2 rounded-l-lg  ${
             activeTab === "upload" ? "bg-blue-500 text-white" : "bg-gray-200"
           }`}
           onClick={() => setActiveTab("upload")}
@@ -19,7 +19,7 @@ const TabNavigation: React.FC = () => {
           Ανεβάστε Φωτογραφίες
         </button>
         <button
-          className={`px-4 py-2 rounded-r-lg   ${
+          className={`px-3 py-2 rounded-r-lg   ${
             activeTab === "gallery" ? "bg-blue-500 text-white" : "bg-gray-200"
           }`}
           onClick={() => setActiveTab("gallery")}

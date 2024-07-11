@@ -152,7 +152,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
         {/* Custom File Input */}
         <label
           htmlFor="file"
-          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none py-2 px-4 text-center"
+          className="block w-full text-sm text-white border border-gray-300 rounded-lg cursor-pointer bg-orange-500 focus:outline-none py-2 px-4 text-center"
         >
           Διαλέξτε φωτογραφία
         </label>
@@ -189,7 +189,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
       <div className="grid grid-cols-1 gap-4">
         <button
           type="submit"
-          className="w-full h-12 bg-blue-500 text-white rounded-lg relative"
+          className="w-full h-12 bg-green-500 text-white rounded-lg relative"
           disabled={uploading || !!fileError}
         >
           {uploading ? (
@@ -226,7 +226,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
         <span className="flex items-center gap-x-3 whitespace-nowrap">
           <div className="flex w-full h-2 bg-gray-400 rounded-full overflow-hidden">
             <div
-              className="flex flex-col justify-center rounded-full overflow-hidden bg-blue-500 text-xs text-white text-center transition duration-500"
+              className="flex flex-col justify-center rounded-full overflow-hidden bg-green-500 text-xs text-white text-center transition duration-500"
               style={{ width: `${uploadProgress}%` }}
             ></div>
           </div>
