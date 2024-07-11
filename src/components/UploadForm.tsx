@@ -144,13 +144,19 @@ const UploadForm: React.FC<UploadFormProps> = ({
         });
         const reader = new FileReader();
         reader.readAsDataURL(compressedFile);
+
         reader.onloadend = () => {
           if (typeof reader.result === "string") {
             setPreviewImage(reader.result);
             setUploadedFile(compressedFile);
             setFileName(compressedFile.name); // Update the file name with the compressed file name
-            setCompressionProgress(100); // Compression complete
+            setCompressionProgress(100); //
+          } else {
+            setFileError("Failed to read the file. Please try again.");
           }
+        };
+        reader.onerror = () => {
+          setFileError("Failed to read the file. Please try again.");
         };
       } catch (error) {
         console.error("Error compressing file", error);

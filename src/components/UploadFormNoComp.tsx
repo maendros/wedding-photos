@@ -134,7 +134,12 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
       reader.onloadend = () => {
         if (typeof reader.result === "string") {
           setPreviewImage(reader.result);
+        } else {
+          setFileError("Failed to read the file. Please try again.");
         }
+      };
+      reader.onerror = () => {
+        setFileError("Failed to read the file. Please try again.");
       };
     } else {
       setPreviewImage(null);
@@ -191,6 +196,7 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
               src={previewImage}
               alt="Preview"
               className="max-w-full h-auto rounded-lg"
+              onError={() => setFileError("Failed to load the image preview.")}
             />
           </div>
         </div>
