@@ -1,6 +1,7 @@
 import { useState } from "react";
 import UploadForm from "./UploadForm";
 import Gallery from "./Gallery";
+import UploadFormNoComp from "./UploadFormNoComp";
 
 const TabNavigation: React.FC = () => {
   const [activeTab, setActiveTab] = useState("upload");
@@ -29,7 +30,11 @@ const TabNavigation: React.FC = () => {
       </div>
       <div>
         {activeTab === "upload" ? (
-          <UploadForm
+          // <UploadForm
+          //   setUploadedFile={setUploadedFile}
+          //   setFileUrl={setFileUrl}
+          // />
+          <UploadFormNoComp
             setUploadedFile={setUploadedFile}
             setFileUrl={setFileUrl}
           />
