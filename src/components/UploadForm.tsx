@@ -29,6 +29,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
 }) => {
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
+  const [compressionProgress, setCompressionProgress] = useState(0);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null); // State to hold file name
@@ -82,6 +83,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
     const file = event.currentTarget.files
       ? event.currentTarget.files[0]
       : null;
+    setPreviewImage(null);
+    setCompressionProgress(0); // Reset compression progress
 
     if (file && !allowedImageTypes.includes(file.type)) {
       setFileError(
@@ -89,7 +92,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
       );
       formik.setFieldValue("file", null);
       setUploadedFile(null);
-      setPreviewImage(null);
+
       setFileName(null); // Clear the file name
       return;
     }
@@ -105,6 +108,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
           maxSizeMB: 1,
           maxWidthOrHeight: 800,
           useWebWorker: true,
+          onProgress: (compressionProgress) => {
+            setCompressionProgress(Math.round(compressionProgress));
+          },
         });
         const reader = new FileReader();
         reader.readAsDataURL(compressedFile);
@@ -113,6 +119,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
             setPreviewImage(reader.result);
             setUploadedFile(compressedFile);
             setFileName(compressedFile.name); // Update the file name with the compressed file name
+            setCompressionProgress(100); // Compression complete
           }
         };
       } catch (error) {
@@ -121,40 +128,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
     } else {
       setPreviewImage(null);
     }
-  };
-
-  const resizeImage = (dataURL: string) => {
-    const img = new Image();
-    img.src = dataURL;
-
-    img.onload = () => {
-      const canvas = document.createElement("canvas");
-      const maxWidth = 400;
-      const maxHeight = 400;
-
-      let width = img.width;
-      let height = img.height;
-
-      if (width > maxWidth) {
-        height *= maxWidth / width;
-        width = maxWidth;
-      }
-
-      if (height > maxHeight) {
-        width *= maxHeight / height;
-        height = maxHeight;
-      }
-
-      canvas.width = width;
-      canvas.height = height;
-
-      const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.drawImage(img, 0, 0, width, height);
-        const resizedDataURL = canvas.toDataURL("image/jpeg", 0.7);
-        setPreviewImage(resizedDataURL);
-      }
-    };
   };
 
   return (
@@ -187,21 +160,51 @@ const UploadForm: React.FC<UploadFormProps> = ({
         <div className="text-red-600">{formik.errors.file}</div>
       )}
 
-      {previewImage && (
+      {compressionProgress > 0 && compressionProgress < 100 && (
+        <span className="flex items-center gap-x-3 whitespace-nowrap">
+          <div className="flex w-full h-2 bg-gray-400 rounded-full overflow-hidden">
+            <div
+              className="flex flex-col justify-center rounded-full overflow-hidden bg-orange-500 text-xs text-white text-center transition duration-500"
+              style={{ width: `${compressionProgress}%` }}
+            ></div>
+          </div>
+          <div className="w-6 text-end">
+            <span className="text-sm text-gray-800">
+              {compressionProgress}%
+            </span>
+          </div>
+        </span>
+      )}
+
+      {previewImage && compressionProgress === 100 && (
         <div className="flex items-center justify-center">
-          <img
-            src={previewImage}
-            alt="Preview"
-            className="max-w-full h-auto rounded-lg"
-          />
+          <div className="w-11/12 sm:w-3/4 md:w-3/4 lg:w-2/3 xl:w-3/12 mb-2">
+            <img
+              src={previewImage}
+              alt="Preview"
+              className="max-w-full h-auto rounded-lg"
+            />
+          </div>
         </div>
       )}
 
       <div className="grid grid-cols-1 gap-4">
         <button
           type="submit"
-          className="w-full h-12 bg-green-500 text-white rounded-lg relative"
-          disabled={uploading || !!fileError}
+          className={`w-full h-12 rounded-lg relative ${
+            uploading ||
+            !!fileError ||
+            !previewImage ||
+            compressionProgress < 100
+              ? "bg-gray-400 text-gray-700 cursor-not-allowed"
+              : "bg-green-500 text-white"
+          }`}
+          disabled={
+            uploading ||
+            !!fileError ||
+            !previewImage ||
+            compressionProgress < 100
+          }
         >
           {uploading ? (
             <span className="flex items-center justify-center">
