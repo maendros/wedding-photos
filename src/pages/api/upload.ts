@@ -11,7 +11,7 @@ export const config = {
 
 const upload = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const form = formidable();
+    const form = formidable({ multiples: true });
 
     form.parse(req, async (err, fields, files) => {
       if (err) {
@@ -20,7 +20,7 @@ const upload = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
-      const fileArray = files.file as formidable.File[] | undefined;
+      const fileArray = files.file instanceof Array ? files.file : [files.file];
 
       if (!fileArray || fileArray.length === 0) {
         console.error("No file uploaded");
@@ -28,7 +28,7 @@ const upload = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
-      const file = fileArray[0];
+      const file = fileArray[0] as formidable.File;
 
       // Validate file type
       const validMimeTypes = ["image/jpeg", "image/png", "image/gif"];
