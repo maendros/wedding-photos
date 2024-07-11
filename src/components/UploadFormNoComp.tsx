@@ -37,6 +37,7 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
   const [fileName, setFileName] = useState<string | null>(null);
   const [photoUploadEnabled, setPhotoUploadEnabled] = useState(true);
   const [showSplash, setShowSplash] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUploadState = async () => {
@@ -45,6 +46,7 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
         setPhotoUploadEnabled(response.data.isUploadEnabled);
       } catch (error) {
         console.error("Error fetching upload state:", error);
+        setServerError("Error fetching upload state.");
       }
     };
 
@@ -65,6 +67,7 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
 
         try {
           setUploading(true);
+          setServerError(null);
 
           const response: AxiosResponse<{ url: string }> = await axios.post(
             "/api/upload",
@@ -91,6 +94,7 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
           }, 3000);
         } catch (error) {
           console.error("Σφάλμα κατα το ανεβασμα της φωτογραφίας", error);
+          setServerError("Σφάλμα κατα το ανεβασμα της φωτογραφίας.");
         } finally {
           setUploading(false);
           setUploadProgress(0);
@@ -107,7 +111,7 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
       ? event.currentTarget.files[0]
       : null;
     setPreviewImage(null);
-
+    setServerError(null);
     if (file && !allowedImageTypes.includes(file.type)) {
       setFileError(
         "Μόνο εικονες (jpg, jpeg, png, gif, webp, bmp, tiff) μπορείτε να ανεβάσετε."
@@ -160,6 +164,10 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
       {fileError && <div className="text-red-600">{fileError}</div>}
       {formik.errors.file && (
         <div className="text-red-600">{formik.errors.file}</div>
+      )}
+
+      {serverError && (
+        <div className="text-center text-red-600 mt-4">{serverError}</div>
       )}
 
       <div className="grid grid-cols-1 gap-4 justify-items-center">
