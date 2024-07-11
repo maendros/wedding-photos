@@ -2,19 +2,27 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import ImageModal from "./ImageModal";
+import DeleteModal from "./DeleteModal";
+import { AiFillDelete } from "react-icons/ai";
 
 interface FileUrl {
   name: string;
   url: string;
 }
 
-const Gallery: React.FC = () => {
+interface GalleryProps {
+  enableDelete?: boolean;
+}
+
+const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
   const [fileUrls, setFileUrls] = useState<FileUrl[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [loadingImages, setLoadingImages] = useState<{
     [key: number]: boolean;
   }>({});
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteFileName, setDeleteFileName] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -32,7 +40,9 @@ const Gallery: React.FC = () => {
   }, []);
 
   const handleImageClick = (url: string) => {
-    setSelectedImage(url);
+    if (!enableDelete) {
+      setSelectedImage(url);
+    }
   };
 
   const closeModal = () => {
@@ -44,6 +54,25 @@ const Gallery: React.FC = () => {
       ...prev,
       [index]: true,
     }));
+  };
+
+  const confirmDelete = (fileName: string) => {
+    setDeleteFileName(fileName);
+    setShowDeleteModal(true);
+  };
+
+  const handleDelete = async () => {
+    if (deleteFileName) {
+      try {
+        await axios.delete(`/api/deleteFile?fileName=${deleteFileName}`);
+        setFileUrls((prev) =>
+          prev.filter((file) => file.name !== deleteFileName)
+        );
+        setShowDeleteModal(false);
+      } catch (error) {
+        console.error("Error deleting file:", error);
+      }
+    }
   };
 
   if (loading) {
@@ -90,6 +119,14 @@ const Gallery: React.FC = () => {
                 }`}
                 onLoad={() => handleImageLoad(index)}
               />
+              {enableDelete && (
+                <button
+                  className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full"
+                  onClick={() => confirmDelete(file.name)}
+                >
+                  <AiFillDelete size={20} />
+                </button>
+              )}
             </div>
           </div>
         ))}
@@ -99,6 +136,13 @@ const Gallery: React.FC = () => {
           url={selectedImage}
           isOpen={!!selectedImage}
           onClose={closeModal}
+        />
+      )}
+      {showDeleteModal && (
+        <DeleteModal
+          isOpen={showDeleteModal}
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={handleDelete}
         />
       )}
     </>
