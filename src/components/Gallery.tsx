@@ -80,7 +80,7 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-20 w-20 border-t-2 border-b-2 border-gray-900"></div>
-          <p className="mt-4">Loading...</p>
+          <p className="mt-4">Φόρτωση...</p>
         </div>
       </div>
     );
@@ -89,7 +89,7 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
   if (fileUrls.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen">
-        <p>No images found.</p>
+        <p>Δεν έχουν ανέβει φωτογραφίες.</p>
       </div>
     );
   }

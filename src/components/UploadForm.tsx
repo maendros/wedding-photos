@@ -97,20 +97,18 @@ const UploadForm: React.FC<UploadFormProps> = ({
     }
   };
 
-  // Function to resize the image to fit within specific dimensions
   const resizeImage = (dataURL: string) => {
     const img = new Image();
     img.src = dataURL;
 
     img.onload = () => {
       const canvas = document.createElement("canvas");
-      const maxWidth = 400; // Maximum width for the resized image
-      const maxHeight = 400; // Maximum height for the resized image
+      const maxWidth = 400;
+      const maxHeight = 400;
 
       let width = img.width;
       let height = img.height;
 
-      // Calculate new dimensions while maintaining aspect ratio
       if (width > maxWidth) {
         height *= maxWidth / width;
         width = maxWidth;
@@ -136,13 +134,19 @@ const UploadForm: React.FC<UploadFormProps> = ({
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-4">
       <div className="relative">
-        {/* File input */}
+        {/* Custom File Input */}
+        <label
+          htmlFor="file"
+          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none py-2 px-4 text-center"
+        >
+          Διάλεξε Αρχείο
+        </label>
         <input
           id="file"
           name="file"
           type="file"
           onChange={handleFileChange}
-          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 focus:outline-none"
+          className="hidden"
         />
       </div>
 
@@ -188,10 +192,10 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647zM20 4.708c1.865 2.114 3 4.896 3 7.938h4c0-6.627-5.373-12-12-12v4c3.042 0 5.824 1.135 7.938 3l-2.647 3z"
               ></path>
             </svg>
-            Uploading...
+            Η φωτογραφία ανεβαίνει...
           </span>
         ) : (
-          "Upload Photo"
+          "Ανεβάστε Φωτογραφία"
         )}
       </button>
 

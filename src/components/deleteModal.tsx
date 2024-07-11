@@ -27,19 +27,21 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
       <div className="bg-white rounded-lg p-6 w-full max-w-md text-center">
         <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
-        <p className="mb-4">Are you sure you want to delete this image?</p>
+        <p className="mb-4">
+          Είστε σίγουροι ότι θέλετε να διαγράψετε τη φωτογραφία?
+        </p>
         <div className="flex justify-center space-x-4">
           <button
             className="px-4 py-2 bg-red-600 text-white rounded-lg"
             onClick={onConfirm}
           >
-            Yes, Delete
+            Ναι , Διαγραφή
           </button>
           <button
             className="px-4 py-2 bg-gray-300 text-black rounded-lg"
             onClick={onClose}
           >
-            Cancel
+            Ακύρωση
           </button>
         </div>
       </div>

@@ -12,7 +12,7 @@ const Home = () => {
         Αποτυπώστε αυτήν την ξεχωριστή μέρα για μας μεσα από τα δικά σας μάτια.
       </p>
       <div className="flex flex-col items-center mb-4">
-        <div className="w-11/12 sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-5/12 mb-2">
+        <div className="w-11/12 sm:w-3/4 md:w-3/4 lg:w-2/3 xl:w-3/12 mb-2">
           <Image
             src="/family.jpg"
             alt="Family"

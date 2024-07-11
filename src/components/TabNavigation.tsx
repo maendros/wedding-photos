@@ -16,7 +16,7 @@ const TabNavigation: React.FC = () => {
           }`}
           onClick={() => setActiveTab("upload")}
         >
-          Upload Photos
+          Ανεβάστε Φωτογραφίες
         </button>
         <button
           className={`px-4 py-2 mx-2 ${
@@ -24,7 +24,7 @@ const TabNavigation: React.FC = () => {
           }`}
           onClick={() => setActiveTab("gallery")}
         >
-          Gallery
+          Gallery Φωτογραφιών
         </button>
       </div>
       <div>

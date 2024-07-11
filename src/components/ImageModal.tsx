@@ -23,7 +23,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ url, isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
       <button className="absolute top-4 right-4 text-white" onClick={onClose}>
-        Close
+        Κλείσιμο
       </button>
       <div className="relative w-3/4 h-3/4">
         <Image
