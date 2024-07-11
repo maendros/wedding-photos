@@ -12,6 +12,16 @@ interface FormValues {
   file: File | null;
 }
 
+const allowedImageTypes = [
+  "image/jpeg",
+  "image/jpg",
+  "image/png",
+  "image/gif",
+  "image/webp",
+  "image/bmp",
+  "image/tiff",
+];
+
 const UploadForm: React.FC<UploadFormProps> = ({
   setUploadedFile,
   setFileUrl,
@@ -72,8 +82,10 @@ const UploadForm: React.FC<UploadFormProps> = ({
       ? event.currentTarget.files[0]
       : null;
 
-    if (file && !["image/jpeg", "image/png", "image/gif"].includes(file.type)) {
-      setFileError("Μόνο εικονες (jpg, png, gif) μπορείτε να ανεβάσετε.");
+    if (file && !allowedImageTypes.includes(file.type)) {
+      setFileError(
+        "Μόνο εικονες (jpg, jpeg, png, gif, webp, bmp, tiff) μπορείτε να ανεβάσετε."
+      );
       formik.setFieldValue("file", null);
       setUploadedFile(null);
       setPreviewImage(null);
