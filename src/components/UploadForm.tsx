@@ -184,18 +184,6 @@ const UploadForm: React.FC<UploadFormProps> = ({
         <ProgressBar progress={compressionProgress} color="bg-orange-500" />
       )}
 
-      {previewImage && compressionProgress === 100 && (
-        <div className="flex items-center justify-center">
-          <div className="w-11/12 sm:w-3/4 md:w-3/4 lg:w-2/3 xl:w-3/12 mb-2">
-            <img
-              src={previewImage}
-              alt="Preview"
-              className="max-w-full h-auto rounded-lg"
-            />
-          </div>
-        </div>
-      )}
-
       <div className="grid grid-cols-1 gap-4 justify-items-center">
         <UploadButton
           uploading={uploading}
@@ -208,6 +196,18 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
       {uploadProgress > 0 && (
         <ProgressBar progress={uploadProgress} color="bg-green-500" />
+      )}
+
+      {previewImage && compressionProgress === 100 && (
+        <div className="flex items-center justify-center">
+          <div className="w-11/12 sm:w-3/4 md:w-3/4 lg:w-2/3 xl:w-3/12 mb-2">
+            <img
+              src={previewImage}
+              alt="Preview"
+              className="max-w-full h-auto rounded-lg"
+            />
+          </div>
+        </div>
       )}
 
       {!photoUploadEnabled && (
