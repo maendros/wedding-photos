@@ -45,7 +45,15 @@ const upload = async (req: NextApiRequest, res: NextApiResponse) => {
       const file = fileArray[0] as formidable.File;
 
       // Validate file type
-      const validMimeTypes = ["image/jpeg", "image/png", "image/gif"];
+      const validMimeTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/gif",
+        "image/webp",
+        "image/bmp",
+        "image/tiff",
+      ];
       if (!validMimeTypes.includes(file.mimetype!)) {
         console.error("Invalid file type");
         res.status(400).json({ error: "Only image files are allowed" });

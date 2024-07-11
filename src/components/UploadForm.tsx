@@ -39,6 +39,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
   const [fileName, setFileName] = useState<string | null>(null);
   const [photoUploadEnabled, setPhotoUploadEnabled] = useState(true);
   const [showSplash, setShowSplash] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchUploadState = async () => {
@@ -93,6 +94,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
           }, 3000);
         } catch (error) {
           console.error("Σφάλμα κατα το ανεβασμα της φωτογραφίας", error);
+          setServerError(
+            "An error occurred while uploading the photo. Please try again."
+          );
         } finally {
           setUploading(false);
           setUploadProgress(0);
@@ -109,6 +113,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
       ? event.currentTarget.files[0]
       : null;
     setPreviewImage(null);
+    setServerError(null);
     setCompressionProgress(0); // Reset compression progress
 
     if (file && !allowedImageTypes.includes(file.type)) {
@@ -149,6 +154,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
         };
       } catch (error) {
         console.error("Error compressing file", error);
+        setServerError(
+          "An error occurred while compressing the file. Please try again."
+        );
       }
     } else {
       setPreviewImage(null);
@@ -214,6 +222,10 @@ const UploadForm: React.FC<UploadFormProps> = ({
         <div className="text-center text-red-600 mt-4">
           Photo uploads are disabled.
         </div>
+      )}
+
+      {serverError && (
+        <div className="text-center text-red-600 mt-4">{serverError}</div>
       )}
     </form>
   );
