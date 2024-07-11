@@ -16,6 +16,7 @@
     "dotenv": "^16.4.5",
     "formidable": "^3.5.1",
     "formik": "^2.4.6",
+    "fs": "^0.0.1-security",
     "next": "14.2.4",
     "qrcode.react": "^3.1.0",
     "react": "^18",

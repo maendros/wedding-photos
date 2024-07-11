@@ -1,7 +1,16 @@
+// src/pages/api/upload.ts
 import { NextApiRequest, NextApiResponse } from "next";
 import { bucket } from "../../googleCloudStorage";
 import fs from "fs";
 import formidable from "formidable";
+import path from "path";
+
+const configFilePath = path.resolve("config.json");
+
+const getConfig = () => {
+  const data = fs.readFileSync(configFilePath, "utf-8");
+  return JSON.parse(data);
+};
 
 export const config = {
   api: {
@@ -10,6 +19,11 @@ export const config = {
 };
 
 const upload = async (req: NextApiRequest, res: NextApiResponse) => {
+  const { isUploadEnabled } = getConfig();
+  if (!isUploadEnabled) {
+    return res.status(403).json({ error: "Photo uploads are disabled." });
+  }
+
   try {
     const form = formidable({ multiples: true });
 
@@ -31,15 +45,7 @@ const upload = async (req: NextApiRequest, res: NextApiResponse) => {
       const file = fileArray[0] as formidable.File;
 
       // Validate file type
-      const validMimeTypes = [
-        "image/jpeg",
-        "image/jpg",
-        "image/png",
-        "image/gif",
-        "image/webp",
-        "image/bmp",
-        "image/tiff",
-      ];
+      const validMimeTypes = ["image/jpeg", "image/png", "image/gif"];
       if (!validMimeTypes.includes(file.mimetype!)) {
         console.error("Invalid file type");
         res.status(400).json({ error: "Only image files are allowed" });

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import axios, { AxiosResponse } from "axios";
@@ -33,6 +33,20 @@ const UploadForm: React.FC<UploadFormProps> = ({
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [fileError, setFileError] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null); // State to hold file name
+  const [photoUploadEnabled, setPhotoUploadEnabled] = useState(true);
+
+  useEffect(() => {
+    const fetchUploadState = async () => {
+      try {
+        const response = await axios.get("/api/toggleUpload");
+        setPhotoUploadEnabled(response.data.isUploadEnabled);
+      } catch (error) {
+        console.error("Error fetching upload state:", error);
+      }
+    };
+
+    fetchUploadState();
+  }, []);
 
   const formik = useFormik<FormValues>({
     initialValues: {
@@ -136,7 +150,9 @@ const UploadForm: React.FC<UploadFormProps> = ({
         {/* Custom File Input */}
         <label
           htmlFor="file"
-          className="block w-full text-sm text-white border border-gray-300 rounded-lg cursor-pointer bg-orange-500 focus:outline-none py-2 px-4 text-center"
+          className={`block w-full text-sm text-white border border-gray-300 rounded-lg cursor-pointer bg-orange-500 focus:outline-none py-2 px-4 text-center ${
+            !photoUploadEnabled ? "bg-gray-400 cursor-not-allowed" : ""
+          }`}
         >
           Διαλέξτε φωτογραφία
         </label>
@@ -146,6 +162,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
           type="file"
           onChange={handleFileChange}
           className="hidden"
+          disabled={!photoUploadEnabled}
         />
       </div>
 
@@ -195,7 +212,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
             uploading ||
             !!fileError ||
             !previewImage ||
-            compressionProgress < 100
+            compressionProgress < 100 ||
+            !photoUploadEnabled
               ? "bg-gray-400 text-gray-700 cursor-not-allowed"
               : "bg-green-500 text-white"
           }`}
@@ -203,7 +221,8 @@ const UploadForm: React.FC<UploadFormProps> = ({
             uploading ||
             !!fileError ||
             !previewImage ||
-            compressionProgress < 100
+            compressionProgress < 100 ||
+            !photoUploadEnabled
           }
         >
           {uploading ? (
@@ -248,6 +267,12 @@ const UploadForm: React.FC<UploadFormProps> = ({
             <span className="text-sm text-gray-800">{uploadProgress}%</span>
           </div>
         </span>
+      )}
+
+      {!photoUploadEnabled && (
+        <div className="text-center text-red-600 mt-4">
+          Photo uploads are disabled.
+        </div>
       )}
     </form>
   );
