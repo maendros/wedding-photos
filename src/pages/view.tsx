@@ -31,9 +31,9 @@ const ViewPage: React.FC = () => {
 
   return (
     <div>
-      <div className="flex justify-center my-4">
+      <div className="flex flex-col md:flex-row justify-center my-4">
         <button
-          className={`px-4 py-2 mx-2 ${
+          className={`px-4 py-2 mx-2 my-2 md:my-0 ${
             photoUploadEnabled
               ? "bg-gray-400 text-gray-700 cursor-not-allowed"
               : "bg-green-500 text-white"
@@ -44,7 +44,7 @@ const ViewPage: React.FC = () => {
           Resume Photo Upload
         </button>
         <button
-          className={`px-4 py-2 mx-2 ${
+          className={`px-4 py-2 mx-2 my-2 md:my-0 ${
             !photoUploadEnabled
               ? "bg-gray-400 text-gray-700 cursor-not-allowed"
               : "bg-red-500 text-white"
@@ -55,12 +55,13 @@ const ViewPage: React.FC = () => {
           Stop Photo Upload
         </button>
         <button
-          className="px-4 py-2 mx-2 bg-blue-500 text-white rounded-lg"
+          className="px-4 py-2 mx-2 my-2 md:my-0 bg-blue-500 text-white rounded-lg"
           onClick={() => router.push("/")}
         >
           Go to the app
         </button>
       </div>
+
       {!photoUploadEnabled && (
         <div className="text-center text-red-600 mb-4">
           Photo uploads are disabled.
