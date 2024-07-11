@@ -6,6 +6,7 @@ import imageCompression from "browser-image-compression";
 import CustomFileInput from "./CustomFileInput";
 import ProgressBar from "./ProgressBar";
 import UploadButton from "./UploadButton";
+import Confetti from "react-confetti";
 
 interface UploadFormProps {
   setUploadedFile: (file: File | null) => void;
@@ -37,6 +38,7 @@ const UploadForm: React.FC<UploadFormProps> = ({
   const [fileError, setFileError] = useState<string | null>(null);
   const [fileName, setFileName] = useState<string | null>(null);
   const [photoUploadEnabled, setPhotoUploadEnabled] = useState(true);
+  const [showSplash, setShowSplash] = useState(false);
 
   useEffect(() => {
     const fetchUploadState = async () => {
@@ -83,8 +85,14 @@ const UploadForm: React.FC<UploadFormProps> = ({
           );
 
           setFileUrl(response.data.url);
+          setShowSplash(true);
+          setTimeout(() => {
+            setShowSplash(false);
+            setPreviewImage(null);
+            setFileName(null);
+          }, 3000);
         } catch (error) {
-          console.error("Error uploading file", error);
+          console.error("Σφάλμα κατα το ανεβασμα της φωτογραφίας", error);
         } finally {
           setUploading(false);
           setUploadProgress(0);
@@ -149,6 +157,10 @@ const UploadForm: React.FC<UploadFormProps> = ({
 
   return (
     <form onSubmit={formik.handleSubmit} className="space-y-4">
+      {showSplash && <Confetti />}
+      <div className={`text-green-900 splash ${showSplash ? "show" : ""}`}>
+        <h1 className="text-center text-2xl font-bold my-4">Thank you!</h1>
+      </div>
       <CustomFileInput
         handleFileChange={handleFileChange}
         disabled={!photoUploadEnabled}
