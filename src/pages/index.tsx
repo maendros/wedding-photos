@@ -19,7 +19,7 @@ const Home = () => {
       <p
         className={`text-center md:text-md lg:text-xl ${greatVibes.className} mb-4`}
       >
-        Αποτυπώστε αυτήν την ξεχωριστή μέρα για μας μεσα από τα δικά σας μάτια.
+        Αποτυπώστε αυτήν την ξεχωριστή μέρα για μας μέσα από τα δικά σας μάτια.
       </p>
       <div className="flex flex-col items-center mb-4">
         <div className="w-11/12 sm:w-3/4 md:w-3/4 lg:w-2/3 xl:w-3/12 mb-2">
