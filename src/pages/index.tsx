@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <div className="container mx-auto p-4">
       <h1
-        className={`text-center md:text-2xl lg:text-4xl ${greatVibes.className} my-4`}
+        className={`text-center text-2xl md:text-2xl lg:text-4xl ${greatVibes.className} my-4`}
       >
         Καλωσήρθατε στη σελίδα μας.
       </h1>
