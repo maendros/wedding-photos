@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@google-cloud/storage": "^7.11.3",
+    "@next/font": "^14.2.5",
     "aws-sdk": "^2.1657.0",
     "axios": "^1.7.2",
     "browser-image-compression": "^2.0.2",

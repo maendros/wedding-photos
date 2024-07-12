@@ -1,14 +1,20 @@
 import TabNavigation from "@components/TabNavigation";
 import Image from "next/image";
+import { Great_Vibes } from "@next/font/google";
+
+const greatVibes = Great_Vibes({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
 
 const Home = () => {
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-center text-2xl font-bold my-4">
-        {" "}
+      <h1 className={`text-center text-4xl ${greatVibes.className} my-4`}>
         Καλωσήρθατε στη σελίδα μας.
       </h1>
-      <p className="text-center text-md mb-4">
+      <p className={`text-center text-xl ${greatVibes.className} mb-4`}>
         Αποτυπώστε αυτήν την ξεχωριστή μέρα για μας μεσα από τα δικά σας μάτια.
       </p>
       <div className="flex flex-col items-center mb-4">
@@ -22,8 +28,12 @@ const Home = () => {
             className="rounded-lg"
           />
         </div>
-        <p className="text-center text-lg mb-1">19/07/2024</p>
-        <p className="text-center text-lg">Κώστας - Ρούλα - Αλέξανδρος</p>
+        <p className={`text-center text-lg ${greatVibes.className} mb-1`}>
+          19/07/2024
+        </p>
+        <p className={`text-center text-lg ${greatVibes.className}`}>
+          Κώστας - Ρούλα - Αλέξανδρος
+        </p>
       </div>
       <TabNavigation />
     </div>
