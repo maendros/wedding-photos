@@ -196,17 +196,11 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
               src={previewImage}
               alt="Preview"
               className="max-w-full h-auto rounded-lg"
-              onError={(event) => {
-                const errorMessage =
-                  "Image failed to load: " + JSON.stringify(event);
-                console.error(errorMessage);
-                setFileError(errorMessage);
-                // Optionally, display the error on the page for easier debugging
-                const errorElement = document.createElement("div");
-                errorElement.style.color = "red";
-                errorElement.textContent = errorMessage;
-                document.body.appendChild(errorElement);
-              }}
+              onError={(err) =>
+                setFileError(
+                  `${JSON.stringify(err)}Η φωτογραφία δεν μπορεί να φορτωθεί..`
+                )
+              }
             />
           </div>
         </div>
