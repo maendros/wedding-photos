@@ -11,10 +11,14 @@ const greatVibes = Great_Vibes({
 const Home = () => {
   return (
     <div className="container mx-auto p-4">
-      <h1 className={`text-center text-4xl ${greatVibes.className} my-4`}>
+      <h1
+        className={`text-center md:text-2xl lg:text-4xl ${greatVibes.className} my-4`}
+      >
         Καλωσήρθατε στη σελίδα μας.
       </h1>
-      <p className={`text-center text-xl ${greatVibes.className} mb-4`}>
+      <p
+        className={`text-center md:text-md lg:text-xl ${greatVibes.className} mb-4`}
+      >
         Αποτυπώστε αυτήν την ξεχωριστή μέρα για μας μεσα από τα δικά σας μάτια.
       </p>
       <div className="flex flex-col items-center mb-4">
