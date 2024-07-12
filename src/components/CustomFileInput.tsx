@@ -12,7 +12,7 @@ const CustomFileInput: React.FC<CustomFileInputProps> = ({
   <div className="relative">
     <label
       htmlFor="file"
-      className={`block w-full text-sm text-white border border-gray-300 rounded-lg cursor-pointer bg-orange-500 focus:outline-none py-2 px-4 text-center ${
+      className={`block w-full text-sm text-white border border-gray-300 rounded-lg cursor-pointer bg-blue-500 focus:outline-none py-2 px-4 text-center ${
         disabled ? "bg-gray-400 cursor-not-allowed" : ""
       }`}
     >

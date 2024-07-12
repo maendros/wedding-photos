@@ -13,7 +13,7 @@ const TabNavigation: React.FC = () => {
       <div className="flex justify-center mb-4">
         <button
           className={`px-3 py-2 rounded-l-lg  ${
-            activeTab === "upload" ? "bg-blue-500 text-white" : "bg-gray-200"
+            activeTab === "upload" ? "bg-gray-500 text-white" : "bg-gray-200"
           }`}
           onClick={() => setActiveTab("upload")}
         >
@@ -21,7 +21,7 @@ const TabNavigation: React.FC = () => {
         </button>
         <button
           className={`px-3 py-2 rounded-r-lg   ${
-            activeTab === "gallery" ? "bg-blue-500 text-white" : "bg-gray-200"
+            activeTab === "gallery" ? "bg-gray-500 text-white" : "bg-gray-200"
           }`}
           onClick={() => setActiveTab("gallery")}
         >
