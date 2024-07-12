@@ -196,8 +196,8 @@ const UploadFormNoComp: React.FC<UploadFormProps> = ({
               src={previewImage}
               alt="Preview"
               className="max-w-full h-auto rounded-lg"
-              onError={() =>
-                setFileError("Η φωτογραφία δεν μπορεί να φορτωθεί..")
+              onError={(err) =>
+                setFileError(`${err}Η φωτογραφία δεν μπορεί να φορτωθεί..`)
               }
             />
           </div>
