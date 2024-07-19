@@ -4,6 +4,7 @@ import { bucket } from "../../googleCloudStorage";
 import fs from "fs";
 import formidable from "formidable";
 import path from "path";
+import sharp from "sharp";
 
 const configFilePath = path.resolve("config.json");
 
@@ -16,6 +17,10 @@ export const config = {
   api: {
     bodyParser: false,
   },
+};
+
+const compressImage = async (inputPath: string, outputPath: string) => {
+  await sharp(inputPath).toFormat("jpeg", { quality: 80 }).toFile(outputPath);
 };
 
 const upload = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -60,12 +65,22 @@ const upload = async (req: NextApiRequest, res: NextApiResponse) => {
         return;
       }
 
-      const fileStream = fs.createReadStream(file.filepath);
+      const compressedFilePath = `${file.filepath}-compressed.jpg`;
+
+      try {
+        await compressImage(file.filepath, compressedFilePath);
+      } catch (error) {
+        console.error("Error compressing image:", error);
+        res.status(500).json({ error: "Image compression failed" });
+        return;
+      }
+
+      const fileStream = fs.createReadStream(compressedFilePath);
 
       const blob = bucket.file(file.originalFilename!);
       const blobStream = blob.createWriteStream({
         resumable: false,
-        contentType: file.mimetype as string,
+        contentType: "image/jpeg",
       });
 
       blobStream.on("error", (err) => {
