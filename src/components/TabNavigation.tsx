@@ -4,7 +4,7 @@ import Gallery from "./Gallery";
 import UploadFormNoComp from "./UploadFormNoComp";
 
 const TabNavigation: React.FC = () => {
-  const [activeTab, setActiveTab] = useState("upload");
+  const [activeTab, setActiveTab] = useState("gallery");
   const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const [fileUrl, setFileUrl] = useState<string | null>(null);
 

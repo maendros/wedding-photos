@@ -23,12 +23,44 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
   }>({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteFileName, setDeleteFileName] = useState<string | null>(null);
+  const [nextPageToken, setNextPageToken] = useState<string | null>(null);
+  const [hasMore, setHasMore] = useState(true);
+
+  useEffect(() => {
+    fetchFiles();
+  }, []);
+
+  const fetchFiles = async (pageToken?: string) => {
+    try {
+      const response = await axios.get("/api/listFiles", {
+        params: {
+          limit: 16,
+          pageToken,
+        },
+      });
+      const { fileUrls: newFiles, nextPageToken } = response.data;
+
+      const uniqueNewFiles = newFiles.filter(
+        (file: FileUrl) => !fileUrls.some((f) => f.name === file.name)
+      );
+      setFileUrls((prev) => [...prev, ...uniqueNewFiles]);
+
+      setNextPageToken(nextPageToken || null);
+      setHasMore(!!nextPageToken);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching files:", error);
+      setLoading(false);
+    }
+  };
+
+  const loadMoreImages = () => {
+    fetchFiles(nextPageToken || undefined);
+  };
+
   const handleDownload = async (url: string, fileName: string) => {
     try {
-      console.log(url);
-
-      const response = await fetch(url, { mode: "no-cors" });
-
+      const response = await fetch(url);
       const blob = await response.blob();
       const blobUrl = window.URL.createObjectURL(blob);
 
@@ -39,28 +71,12 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
       document.body.appendChild(link);
       link.click();
 
-      // Clean up
       link.remove();
       window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
       console.error("Error downloading the file", error);
     }
   };
-
-  useEffect(() => {
-    const fetchFiles = async () => {
-      try {
-        const response = await axios.get("/api/listFiles");
-        setFileUrls(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching files:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchFiles();
-  }, []);
 
   const handleImageClick = (url: string) => {
     if (!enableDelete) {
@@ -102,7 +118,7 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
     }
   };
 
-  if (loading) {
+  if (loading && fileUrls.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="text-center">
@@ -180,6 +196,16 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
           }}
           onConfirm={handleDelete}
         />
+      )}
+      {hasMore && !loading && (
+        <div className="flex justify-center mt-4">
+          <button
+            onClick={loadMoreImages}
+            className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+          >
+            Περισσότερες Φωτογραφίες
+          </button>
+        </div>
       )}
     </>
   );
