@@ -3,7 +3,7 @@ import axios from "axios";
 import Image from "next/image";
 import ImageModal from "./ImageModal";
 import DelModal from "./DelModal";
-import { AiFillDelete } from "react-icons/ai";
+import { AiFillDelete, AiOutlineDownload } from "react-icons/ai";
 
 interface FileUrl {
   name: string;
@@ -23,6 +23,29 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
   }>({});
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteFileName, setDeleteFileName] = useState<string | null>(null);
+  const handleDownload = async (url: string, fileName: string) => {
+    try {
+      console.log(url);
+
+      const response = await fetch(url, { mode: "no-cors" });
+
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = blobUrl;
+      link.setAttribute("download", fileName);
+
+      document.body.appendChild(link);
+      link.click();
+
+      // Clean up
+      link.remove();
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error("Error downloading the file", error);
+    }
+  };
 
   useEffect(() => {
     const fetchFiles = async () => {
@@ -102,11 +125,7 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
         {fileUrls.map((file, index) => (
-          <div
-            key={index}
-            className="relative w-full h-80 p-2 cursor-pointer"
-            onClick={() => handleImageClick(file.url)}
-          >
+          <div key={index} className="relative w-full h-80 p-2">
             <div className="relative w-full h-full">
               {!loadingImages[index] && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gray-200 rounded-lg z-10">
@@ -123,6 +142,16 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
                 }`}
                 onLoad={() => handleImageLoad(index)}
               />
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDownload(file.url, file.name);
+                }}
+                className="absolute bottom-2 left-2 bg-white text-gray-800 p-2 rounded-full shadow-lg hover:bg-gray-200"
+              >
+                <AiOutlineDownload size={20} />
+              </a>
               {enableDelete && (
                 <button
                   className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full"
