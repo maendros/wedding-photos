@@ -153,11 +153,13 @@ const Gallery: React.FC<GalleryProps> = ({ enableDelete = false }) => {
                 alt={`Image ${index + 1}`}
                 layout="fill"
                 objectFit="cover"
+                unoptimized // Add this prop to disable image optimization
                 className={`rounded-lg transition-opacity duration-500 ${
                   loadingImages[index] ? "opacity-100" : "opacity-0"
                 }`}
                 onLoad={() => handleImageLoad(index)}
               />
+
               <a
                 href="#"
                 onClick={(e) => {
